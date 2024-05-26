@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediction Result</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            animation: fadeIn 1s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .container {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 100%;
+            animation: slideIn 1s ease-out;
+        }
+        @keyframes slideIn {
+            from { transform: translateY(-50px); }
+            to { transform: translateY(0); }
+        }
+        .container h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 28px;
+        }
+        .info-item {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+            color: #555;
+        }
+        .info-item i {
+            margin-right: 10px;
+            color: #007bff;
+        }
+        .container label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+        }
+        .container input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            transition: border-color 0.3s;
+        }
+        .container button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+        .container button:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+        }
+        .container img {
+            display: block;
+            margin: 20px auto 0 auto;
+            max-width: 200px;
+            max-height: 200px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Prediction Result</h1>
+        <div class="info-item">
+            <i class="fas fa-user"></i><p>Patient Name: {{ patient.name }}</p>
+        </div>
+        <div class="info-item">
+            <i class="fas fa-calendar-alt"></i><p>Age: {{ patient.age }}</p>
+        </div>
+        <div class="info-item">
+            <i class="fas fa-venus-mars"></i><p>Gender: {{ patient.gender }}</p>
+        </div>
+        <div class="info-item">
+            <i class="fas fa-envelope"></i><p>Email: {{ patient.email }}</p>
+        </div>
+        <div class="info-item">
+            <i class="fas fa-phone"></i><p>Phone Number: {{ patient.phone_number }}</p>
+        </div>
+
+        {% if result %}
+            <div class="info-item">
+                <i class="fas fa-notes-medical"></i><p>Prediction Result: {{ result }}</p>
+            </div>
+        {% else %}
+            <form method="POST" action="{{ url_for('prediction', patient_id=patient.id) }}" enctype="multipart/form-data">
+                <label for="image">Upload Image:</label>
+                <input type="file" id="image" name="image" required onchange="previewImage(event)">
+                <button type="submit">Predict</button>
+            </form>
+            <!-- Display the uploaded image -->
+            <img id="uploadedImage" src="" alt="Uploaded Image">
+        {% endif %}
+    </div>
+
+    <script>
+        function previewImage(event) {
+            var uploadedImage = document.getElementById('uploadedImage');
+            uploadedImage.src = URL.createObjectURL(event.target.files[0]);
+        }
+    </script>
+</body>
+</html>
