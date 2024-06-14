@@ -10,23 +10,54 @@
 
         body {
             font-family: 'Montserrat', sans-serif;
-            background-color: #f8f9fa;
             margin: 0;
             padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
+            background: url('{{ url_for('static', filename='register_bg.jpeg') }}') no-repeat center center fixed;
+            overflow: hidden;
+            animation: backgroundShift 10s infinite alternate;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            background-color: #343a40;
+            backdrop-filter: blur(10px);
+            z-index: 999;
+        }
+
+        .navbar a {
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+            transition: color 0.3s;
+        }
+
+        .navbar a:hover {
+            color: #007bff;
         }
 
         .container {
-            background-color: white;
+            background-color: rgba(255, 255, 255, 0.9);
             padding: 40px;
             border-radius: 10px;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-            max-width: 500px;
+            max-width: 900px;
             width: 100%;
+            display: flex;
+            align-items: center;
             animation: fadeInUp 1s ease-in-out;
+            backdrop-filter: blur(10px);
         }
 
         .container h1 {
@@ -38,11 +69,22 @@
             letter-spacing: 2px;
         }
 
-        .container label {
-            display: block;
-            margin-bottom: 8px;
-            color: #555;
-            font-weight: 600;
+        .form-container {
+            flex: 1;
+            margin-right: 20px;
+        }
+
+        .image-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .image-container img {
+            max-width: 80%;
+            border-radius: 10px;
+            animation: fadeIn 1.2s ease-in-out;
         }
 
         .container .input-group {
@@ -58,15 +100,20 @@
             color: #007bff;
         }
 
+        .container .input-group i.phone-icon {
+            transform: translateY(-50%) scaleX(-1); /* Mirroring the phone icon */
+        }
+
         .container input,
         .container select {
-            width: 100%;
+            width: calc(100% - 40px);
             padding: 10px 10px 10px 30px;
             border-radius: 5px;
             border: 1px solid #ccc;
             transition: border-color 0.3s;
             font-family: inherit;
             font-size: 16px;
+            margin-left: 30px;
         }
 
         .container input:focus,
@@ -102,39 +149,66 @@
                 transform: translateY(0);
             }
         }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes backgroundShift {
+            0% {
+                background-position: center top;
+            }
+            100% {
+                background-position: center bottom;
+            }
+        }
     </style>
 </head>
 <body>
+    <div class="navbar">
+        <a href="{{ url_for('home') }}">Home</a>
+        <a href="{{ url_for('patient_details') }}">Patient Details</a>
+    </div>
     <div class="container">
-        <h1>Patient Details</h1>
-        <form method="POST" action="{{ url_for('patient_details') }}">
-            <div class="input-group">
-                <i class="fas fa-user"></i>
-                <input type="text" id="name" name="name" placeholder="Name" required>
-            </div>
-            <div class="input-group">
-                <i class="fas fa-calendar-alt"></i>
-                <input type="number" id="age" name="age" placeholder="Age" required>
-            </div>
-            <div class="input-group">
-                <i class="fas fa-venus-mars"></i>
-                <select id="gender" name="gender" required>
-                    <option value="" disabled selected>Gender</option>
-                    <option value="male">Male</option>
-                    <option value="female">Female</option>
-                    <option value="other">Other</option>
-                </select>
-            </div>
-            <div class="input-group">
-                <i class="fas fa-envelope"></i>
-                <input type="email" id="email" name="email" placeholder="Email" required>
-            </div>
-            <div class="input-group">
-                <i class="fas fa-phone"></i>
-                <input type="tel" id="phone_number" name="phone_number" placeholder="Phone Number" required>
-            </div>
-            <button type="submit">Submit</button>
-        </form>
+        <div class="form-container">
+            <h1>Patient Details</h1>
+            <form method="POST" action="{{ url_for('patient_details') }}">
+                <div class="input-group">
+                    <i class="fas fa-user"></i>
+                    <input type="text" id="name" name="name" placeholder="Name" required>
+                </div>
+                <div class="input-group">
+                    <i class="fas fa-calendar-alt"></i>
+                    <input type="number" id="age" name="age" placeholder="Age" required>
+                </div>
+                <div class="input-group">
+                    <i class="fas fa-venus-mars"></i>
+                    <select id="gender" name="gender" required>
+                        <option value="" disabled selected>Gender</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" id="email" name="email" placeholder="Email" required>
+                </div>
+                <div class="input-group">
+                    <i class="fas fa-phone phone-icon"></i>
+                    <input type="tel" id="phone_number" name="phone_number" placeholder="Phone Number" required>
+                </div>
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+        <div class="image-container">
+            <img src="{{ url_for('static', filename='patient_details.jpg') }}" alt="Patient Image">
+        </div>
     </div>
 </body>
 </html>
